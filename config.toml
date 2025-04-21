@@ -1,0 +1,60 @@
+# Admin Center Configuration
+
+server_port = 8080
+scripts_dir = "scripts"
+log_dir = "logs"
+retention_days = 365  # 1 year retention as per Czech cybersecurity law
+admin_email = "admin@example.com"
+
+[server]
+host = "0.0.0.0"
+port = 5000
+workers = 4
+
+[database]
+url = "sqlite://data.db"
+max_connections = 10
+
+[security]
+jwt_secret = "change_this_to_a_secure_random_string"
+token_expiration_hours = 24
+password_salt = "change_this_to_a_secure_random_string"
+
+[siem]
+log_retention_days = 365
+alert_threshold = 5
+collectors = [
+  { name = "Windows Event Logs", source_type = "windows", enabled = true, parameters = { channels = ["Security", "System", "Application"] } },
+  { name = "Syslog", source_type = "syslog", enabled = true, parameters = { port = 514, protocol = "udp" } }
+]
+
+[scripts]
+repository_path = "scripts"
+allowed_extensions = ["ps1", "psm1", "psd1"]
+max_script_size_kb = 1024
+execution_timeout_seconds = 300
+execution_mode = "local"
+
+[tickets]
+categories = ["Hardware", "Software", "Network", "Security", "Other"]
+priorities = ["Low", "Medium", "High", "Critical"]
+auto_assign = false
+notification_email = "admin@example.com"
+
+[logging]
+level = "info"
+file_path = "logs/admin_center.log"
+
+[smtp]
+server = "smtp.example.com"
+port = 587
+username = "notify@example.com"
+password = "change-me"
+use_tls = true
+
+[ad_integration]
+enabled = false
+server = "ldap://ad.example.com"
+domain = "EXAMPLE"
+bind_dn = "cn=siem,ou=Service Accounts,dc=example,dc=com"
+bind_password = "change-me"
